@@ -754,3 +754,69 @@ function fnc__specialcol_(values, context) {
 function fnc_project_color(values, context) {
     return false;
 };
+
+
+
+function LandUse_1rule0_eval_expression(context) {
+    // class = 'C' AND luc <> 'VACANT LAND'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['class']  == 'C') && (feature.properties['luc']  != 'VACANT LAND'));
+    } else {
+        return ((feature['class']  == 'C') && (feature['luc']  != 'VACANT LAND'));
+    }
+}
+
+
+function LandUse_1rule1_eval_expression(context) {
+    // class = 'E' AND luc <> 'VACANT LAND'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['class']  == 'E') && (feature.properties['luc']  != 'VACANT LAND'));
+    } else {
+        return ((feature['class']  == 'E') && (feature['luc']  != 'VACANT LAND'));
+    }
+}
+
+
+function LandUse_1rule2_eval_expression(context) {
+    // class = 'I' AND luc <> 'VACANT LAND'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['class']  == 'I') && (feature.properties['luc']  != 'VACANT LAND'));
+    } else {
+        return ((feature['class']  == 'I') && (feature['luc']  != 'VACANT LAND'));
+    }
+}
+
+
+function LandUse_1rule3_eval_expression(context) {
+    // class = 'R' AND luc <> 'VACANT LAND'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return ((feature.properties['class']  == 'R') && (feature.properties['luc']  != 'VACANT LAND'));
+    } else {
+        return ((feature['class']  == 'R') && (feature['luc']  != 'VACANT LAND'));
+    }
+}
+
+
+function LandUse_1rule4_eval_expression(context) {
+    // luc = 'VACANT LAND'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['luc']  == 'VACANT LAND');
+    } else {
+        return (feature['luc']  == 'VACANT LAND');
+    }
+}

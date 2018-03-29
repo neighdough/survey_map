@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/L.Control.Locate.min.css">
     <link rel="stylesheet" href="css/qgis2web.css">
-    <link rel="stylesheet" href="css/MarkerCluster.css">
-    <link rel="stylesheet" href="css/MarkerCluster.Default.css">
     <link rel="stylesheet" href="css/leaflet-measure.css">
     <style>
         html,
@@ -41,10 +39,10 @@
     <script src="js/labelgun.min.js"></script>
     <script src="js/labels.js"></script>
     <script src="js/leaflet-measure.js"></script>
-    <script src="js/leaflet.markercluster.js"></script>
-    <script src="data/parcels_0.js"></script>
-    <script src="data/infrastructure_1.js"></script>
-    <script src="data/litter_type_2.js"></script>
+    <script src="data/infrastructure_0.js"></script>
+    <script src="data/LandUse_1.js"></script>
+    <script src="data/UnoccupiedParcel_2.js"></script>
+    <script src="data/LooseLitterPoint_4.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=" + APIKEY async defer></script>
     <script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script>
@@ -70,8 +68,8 @@
             maxZoom: 28,
             minZoom: 1
         }).fitBounds([
-            [35.1429374382, -90.056513646],
-            [35.1502597534, -90.0473193458]
+            [35.1105254317, -90.1005106658],
+            [35.1691088293, -90.0151492675]
         ]);
         var hash = new L.Hash(map);
         map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
@@ -94,7 +92,6 @@
             maxZoom: 28
         });
         basemap1.addTo(map);
-
         var roadMutant = L.gridLayer.googleMutant({
             maxZoom: 24,
             type: 'roadmap'
@@ -174,21 +171,10 @@
             maxZoom: 24,
             type: 'hybrid'
         });
-        /*L.control.layers({
-            Roadmap: roadMutant,
-            Aerial: satMutant,
-            Terrain: terrainMutant,
-            Hybrid: hybridMutant,
-            Styles: styleMutant,
-            Traffic: trafficMutant,
-            Transit: transitMutant
-        }, {}, {
-            collapsed: false
-        }).addTo(map);*/
 
         function setBounds() {}
 
-        function pop_parcels_0(feature, layer) {
+        function pop_infrastructure_0(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -199,13 +185,16 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['adrno'] !== null ? Autolinker.link(String(feature.properties['adrno'])) : '') + '</td>\
+                        <th scope="row">Parcel ID</th>\
+                        <td>' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>address</strong><br />' + (feature.properties['address'] !== null ? Autolinker.link(String(feature.properties['address'])) : '') + '</td>\
+                        <th scope="row">Infrastructure Type</th>\
+                        <td>' + (feature.properties['inf_type'] !== null ? Autolinker.link(String(feature.properties['inf_type'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>parcelid</strong><br />' + (feature.properties['parcelid'] !== null ? Autolinker.link(String(feature.properties['parcelid'])) : '') + '</td>\
+                        <th scope="row">Location on parcel</th>\
+                        <td>' + (feature.properties['inf_loc'] !== null ? Autolinker.link(String(feature.properties['inf_loc'])) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {
@@ -213,61 +202,11 @@
             });
         }
 
-        function style_parcels_0_0() {
-            return {
-                pane: 'pane_parcels_0',
-                opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(151,142,223,0.0)',
-            }
-        }
-        map.createPane('pane_parcels_0');
-        map.getPane('pane_parcels_0').style.zIndex = 400;
-        map.getPane('pane_parcels_0').style['mix-blend-mode'] = 'normal';
-        var layer_parcels_0 = new L.geoJson(json_parcels_0, {
-            attribution: '<a href=""></a>',
-            pane: 'pane_parcels_0',
-            onEachFeature: pop_parcels_0,
-            style: style_parcels_0_0,
-        });
-        bounds_group.addLayer(layer_parcels_0);
-
-        function pop_infrastructure_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2"><strong>Parcel ID</strong><br />' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>Infrastructure Type</strong><br />' + (feature.properties['inf_type'] !== null ? Autolinker.link(String(feature.properties['inf_type'])) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>Location on parcel</strong><br />' + (feature.properties['inf_loc'] !== null ? Autolinker.link(String(feature.properties['inf_loc'])) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {
-                maxHeight: 400
-            });
-        }
-
-        function style_infrastructure_1_0(feature) {
+        function style_infrastructure_0_0(feature) {
             switch (String(feature.properties['inf_type'])) {
                 case 'DU':
                     return {
-                        pane: 'pane_infrastructure_1',
+                        pane: 'pane_infrastructure_0',
                         rotationAngle: 0.0,
                         rotationOrigin: 'center center',
                         icon: L.icon({
@@ -278,7 +217,7 @@
                     break;
                 case 'RB':
                     return {
-                        pane: 'pane_infrastructure_1',
+                        pane: 'pane_infrastructure_0',
                         rotationAngle: 0.0,
                         rotationOrigin: 'center center',
                         icon: L.icon({
@@ -289,7 +228,7 @@
                     break;
                 case 'WB':
                     return {
-                        pane: 'pane_infrastructure_1',
+                        pane: 'pane_infrastructure_0',
                         rotationAngle: 0.0,
                         rotationOrigin: 'center center',
                         icon: L.icon({
@@ -300,31 +239,24 @@
                     break;
             }
         }
-        map.createPane('pane_infrastructure_1');
-        map.getPane('pane_infrastructure_1').style.zIndex = 401;
-        map.getPane('pane_infrastructure_1').style['mix-blend-mode'] = 'normal';
-        var layer_infrastructure_1 = new L.geoJson(json_infrastructure_1, {
+        map.createPane('pane_infrastructure_0');
+        map.getPane('pane_infrastructure_0').style.zIndex = 400;
+        map.getPane('pane_infrastructure_0').style['mix-blend-mode'] = 'normal';
+        var layer_infrastructure_0 = new L.geoJson(json_infrastructure_0, {
             attribution: '<a href=""></a>',
-            pane: 'pane_infrastructure_1',
-            onEachFeature: pop_infrastructure_1,
+            pane: 'pane_infrastructure_0',
+            onEachFeature: pop_infrastructure_0,
             pointToLayer: function(feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_infrastructure_1_0(feature));
+                return L.marker(latlng, style_infrastructure_0_0(feature));
             },
         });
-        var cluster_infrastructure_1 = new L.MarkerClusterGroup({
-            showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2
-        });
-        cluster_infrastructure_1.addLayer(layer_infrastructure_1);
+        bounds_group.addLayer(layer_infrastructure_0);
 
-        bounds_group.addLayer(layer_infrastructure_1);
-        cluster_infrastructure_1.addTo(map);
-
-        function pop_litter_type_2(feature, layer) {
+        function pop_LandUse_1(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -335,16 +267,24 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2"><strong>Parcel ID</strong><br />' + (feature.properties['parcelid'] !== null ? Autolinker.link(String(feature.properties['parcelid'])) : '') + '</td>\
+                        <th scope="row">address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(String(feature.properties['address'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>Survey Date</strong><br />' + (feature.properties['survey_date'] !== null ? Autolinker.link(String(feature.properties['survey_date'])) : '') + '</td>\
+                        <th scope="row">parcelid</th>\
+                        <td>' + (feature.properties['parcelid'] !== null ? Autolinker.link(String(feature.properties['parcelid'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>Litter Type</strong><br />' + (feature.properties['litter_type'] !== null ? Autolinker.link(String(feature.properties['litter_type'])) : '') + '</td>\
+                        <th scope="row">luc</th>\
+                        <td>' + (feature.properties['luc'] !== null ? Autolinker.link(String(feature.properties['luc'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>Location on Parcel</strong><br />' + (feature.properties['loc_on_parcel'] !== null ? Autolinker.link(String(feature.properties['loc_on_parcel'])) : '') + '</td>\
+                        <th scope="row">class</th>\
+                        <td>' + (feature.properties['class'] !== null ? Autolinker.link(String(feature.properties['class'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">electricity disconnected</th>\
+                        <td>' + (feature.properties['ecut'] !== null ? Autolinker.link(String(feature.properties['ecut'])) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {
@@ -352,110 +292,198 @@
             });
         }
 
-        function style_litter_type_2_0(feature) {
-            switch (String(feature.properties['litter_type'])) {
-                case 'BW':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/trash_bag.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
-                case 'GR':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/spray.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
-                case 'HE':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/accommodation_camping.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
-                case 'LL':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/landuse_quary.svg',
-                            iconSize: [31.92, 31.92]
-                        }),
-                    }
-                    break;
-                case 'OW':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/poi_embassy2.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
-                case 'PP':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/garbage_pile.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
-                case 'TI':
-                    return {
-                        pane: 'pane_litter_type_2',
-                        rotationAngle: 0.0,
-                        rotationOrigin: 'center center',
-                        icon: L.icon({
-                            iconUrl: 'markers/tires.svg',
-                            iconSize: [30.4, 30.4]
-                        }),
-                    }
-                    break;
+        function style_LandUse_1_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (LandUse_1rule0_eval_expression(context)) {
+                return {
+                    pane: 'pane_LandUse_1',
+                    opacity: 1,
+                    color: 'rgba(0,0,0,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(242,49,72,1.0)',
+                };
+            } else if (LandUse_1rule1_eval_expression(context)) {
+                return {
+                    pane: 'pane_LandUse_1',
+                    opacity: 1,
+                    color: 'rgba(0,0,0,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(166,206,227,1.0)',
+                };
+            } else if (LandUse_1rule2_eval_expression(context)) {
+                return {
+                    pane: 'pane_LandUse_1',
+                    opacity: 1,
+                    color: 'rgba(0,0,0,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(189,133,237,1.0)',
+                };
+            } else if (LandUse_1rule3_eval_expression(context)) {
+                return {
+                    pane: 'pane_LandUse_1',
+                    opacity: 1,
+                    color: 'rgba(0,0,0,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(233,239,58,1.0)',
+                };
+            } else if (LandUse_1rule4_eval_expression(context)) {
+                return {
+                    pane: 'pane_LandUse_1',
+                    opacity: 1,
+                    color: 'rgba(0,0,0,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(199,192,201,1.0)',
+                };
+            } else {
+                return {
+                    fill: false,
+                    stroke: false
+                };
             }
         }
-        map.createPane('pane_litter_type_2');
-        map.getPane('pane_litter_type_2').style.zIndex = 402;
-        map.getPane('pane_litter_type_2').style['mix-blend-mode'] = 'normal';
-        var layer_litter_type_2 = new L.geoJson(json_litter_type_2, {
+        map.createPane('pane_LandUse_1');
+        map.getPane('pane_LandUse_1').style.zIndex = 401;
+        map.getPane('pane_LandUse_1').style['mix-blend-mode'] = 'normal';
+        var layer_LandUse_1 = new L.geoJson(json_LandUse_1, {
             attribution: '<a href=""></a>',
-            pane: 'pane_litter_type_2',
-            onEachFeature: pop_litter_type_2,
+            pane: 'pane_LandUse_1',
+            onEachFeature: pop_LandUse_1,
+            style: style_LandUse_1_0,
+        });
+        bounds_group.addLayer(layer_LandUse_1);
+
+        function pop_UnoccupiedParcel_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+        }
+
+        function style_UnoccupiedParcel_2_0() {
+            return {
+                pane: 'pane_UnoccupiedParcel_2',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,1.0)',
+            }
+        }
+        map.createPane('pane_UnoccupiedParcel_2');
+        map.getPane('pane_UnoccupiedParcel_2').style.zIndex = 402;
+        map.getPane('pane_UnoccupiedParcel_2').style['mix-blend-mode'] = 'normal';
+        var layer_UnoccupiedParcel_2 = new L.geoJson(json_UnoccupiedParcel_2, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_UnoccupiedParcel_2',
+            onEachFeature: pop_UnoccupiedParcel_2,
+            style: style_UnoccupiedParcel_2_0,
+        });
+        bounds_group.addLayer(layer_UnoccupiedParcel_2);
+        var img_LooseLitterConcentration_3 = 'data/LooseLitterConcentration_3.png';
+        var img_bounds_LooseLitterConcentration_3 = [
+            [35.1320601361, -90.0633366401],
+            [35.1535395918, -90.0403318496]
+        ];
+        var overlay_LooseLitterConcentration_3 = new L.imageOverlay(img_LooseLitterConcentration_3, img_bounds_LooseLitterConcentration_3);
+        bounds_group.addLayer(overlay_LooseLitterConcentration_3);
+        map.addLayer(overlay_LooseLitterConcentration_3);
+
+        function pop_LooseLitterPoint_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">li_type</th>\
+                        <td>' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">count</th>\
+                        <td>' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">parcelnumb</th>\
+                        <td>' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_LooseLitterPoint_4_0() {
+            return {
+                pane: 'pane_LooseLitterPoint_4',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,1.0)',
+            }
+        }
+        map.createPane('pane_LooseLitterPoint_4');
+        map.getPane('pane_LooseLitterPoint_4').style.zIndex = 404;
+        map.getPane('pane_LooseLitterPoint_4').style['mix-blend-mode'] = 'normal';
+        var layer_LooseLitterPoint_4 = new L.geoJson(json_LooseLitterPoint_4, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_LooseLitterPoint_4',
+            onEachFeature: pop_LooseLitterPoint_4,
             pointToLayer: function(feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_litter_type_2_0(feature));
+                return L.circleMarker(latlng, style_LooseLitterPoint_4_0(feature));
             },
         });
-        var cluster_litter_type_2 = new L.MarkerClusterGroup({
-            showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2
-        });
-        cluster_litter_type_2.addLayer(layer_litter_type_2);
-
-        bounds_group.addLayer(layer_litter_type_2);
-        cluster_litter_type_2.addTo(map);
+        bounds_group.addLayer(layer_LooseLitterPoint_4);
         var baseMaps = {
             'OSM B&W': basemap0,
             'OSM HOT': basemap1,
@@ -464,11 +492,20 @@
             'Satellite': satMutant
         };
         L.control.layers(baseMaps, {
-            'litter_type<br /><table><tr><td style="text-align: center;"><img src="legend/litter_type_2_BW0.png" /></td><td>BW</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_GR1.png" /></td><td>GR</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_HE2.png" /></td><td>HE</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_LL3.png" /></td><td>LL</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_OW4.png" /></td><td>OW</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_PP5.png" /></td><td>PP</td></tr><tr><td style="text-align: center;"><img src="legend/litter_type_2_TI6.png" /></td><td>TI</td></tr></table>': cluster_litter_type_2,
-            'infrastructure<br /><table><tr><td style="text-align: center;"><img src="legend/infrastructure_1_DU0.png" /></td><td>DU</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_1_RB1.png" /></td><td>RB</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_1_WB2.png" /></td><td>WB</td></tr></table>': cluster_infrastructure_1,
-            '<img src="legend/parcels_0.png" /> parcels': layer_parcels_0,
+            '<img src="legend/LooseLitterPoint_4.png" /> Loose Litter Point': layer_LooseLitterPoint_4,
+            "Loose Litter Concentration": overlay_LooseLitterConcentration_3,
+            '<img src="legend/UnoccupiedParcel_2.png" /> Unoccupied Parcel': layer_UnoccupiedParcel_2,
+            'Land Use<br /><table><tr><td style="text-align: center;"><img src="legend/LandUse_1_Commercial0.png" /></td><td>Commercial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_TaxExemptgovernmentchruchetc1.png" /></td><td>Tax Exempt (government, chruch, etc.)</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Industrial2.png" /></td><td>Industrial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Residential3.png" /></td><td>Residential</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_VacantLand4.png" /></td><td>Vacant Land</td></tr></table>': layer_LandUse_1,
+            'infrastructure<br /><table><tr><td style="text-align: center;"><img src="legend/infrastructure_0_DU0.png" /></td><td>DU</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_RB1.png" /></td><td>RB</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_WB2.png" /></td><td>WB</td></tr></table>': layer_infrastructure_0,
+        }, {
+            collapsed: false
         }).addTo(map);
         setBounds();
+        L.ImageOverlay.include({
+            getBounds: function() {
+                return this._bounds;
+            }
+        });
     </script>
 </body>
 
