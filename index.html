@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/L.Control.Locate.min.css">
     <link rel="stylesheet" href="css/qgis2web.css">
+    <link rel="stylesheet" href="css/Control.OSMGeocoder.css">
     <link rel="stylesheet" href="css/leaflet-measure.css">
     <style>
         html,
@@ -38,11 +39,19 @@
     <script src="js/rbush.min.js"></script>
     <script src="js/labelgun.min.js"></script>
     <script src="js/labels.js"></script>
+    <script src="js/Control.OSMGeocoder.js"></script>
     <script src="js/leaflet-measure.js"></script>
     <script src="data/infrastructure_0.js"></script>
     <script src="data/LandUse_1.js"></script>
     <script src="data/UnoccupiedParcel_2.js"></script>
-    <script src="data/LooseLitterPoint_4.js"></script>
+    <script src="data/Biowaste_3.js"></script>
+    <script src="data/BaggedWaste_5.js"></script>
+    <script src="data/Graffiti_7.js"></script>
+    <script src="data/HomelessEncampment_9.js"></script>
+    <script src="data/LooseLitter_11.js"></script>
+    <script src="data/OvergrownWeeds_13.js"></script>
+    <script src="data/PickerPile_15.js"></script>
+    <script src="data/Tires_17.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=" + APIKEY async defer></script>
     <script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script>
@@ -68,8 +77,8 @@
             maxZoom: 28,
             minZoom: 1
         }).fitBounds([
-            [35.1105254317, -90.1005106658],
-            [35.1691088293, -90.0151492675]
+            [35.1254363363, -90.0783324975],
+            [35.1595773652, -90.0274186538]
         ]);
         var hash = new L.Hash(map);
         map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
@@ -92,6 +101,7 @@
             maxZoom: 28
         });
         basemap1.addTo(map);
+
         var roadMutant = L.gridLayer.googleMutant({
             maxZoom: 24,
             type: 'roadmap'
@@ -396,14 +406,14 @@
             return {
                 pane: 'pane_UnoccupiedParcel_2',
                 opacity: 1,
-                color: 'rgba(0,0,0,1.0)',
+                color: 'rgba(242,49,72,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0,
+                weight: 3.0,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,127,0,1.0)',
+                fillColor: 'rgba(255,127,0,0.0)',
             }
         }
         map.createPane('pane_UnoccupiedParcel_2');
@@ -416,16 +426,8 @@
             style: style_UnoccupiedParcel_2_0,
         });
         bounds_group.addLayer(layer_UnoccupiedParcel_2);
-        var img_LooseLitterConcentration_3 = 'data/LooseLitterConcentration_3.png';
-        var img_bounds_LooseLitterConcentration_3 = [
-            [35.1320601361, -90.0633366401],
-            [35.1535395918, -90.0403318496]
-        ];
-        var overlay_LooseLitterConcentration_3 = new L.imageOverlay(img_LooseLitterConcentration_3, img_bounds_LooseLitterConcentration_3);
-        bounds_group.addLayer(overlay_LooseLitterConcentration_3);
-        map.addLayer(overlay_LooseLitterConcentration_3);
 
-        function pop_LooseLitterPoint_4(feature, layer) {
+        function pop_Biowaste_3(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -436,16 +438,16 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">li_type</th>\
-                        <td>' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">count</th>\
-                        <td>' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">parcelnumb</th>\
-                        <td>' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {
@@ -453,9 +455,9 @@
             });
         }
 
-        function style_LooseLitterPoint_4_0() {
+        function style_Biowaste_3_0() {
             return {
-                pane: 'pane_LooseLitterPoint_4',
+                pane: 'pane_Biowaste_3',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(0,0,0,1.0)',
@@ -465,25 +467,509 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(51,160,44,1.0)',
+                fillColor: 'rgba(1,108,89,1.0)',
             }
         }
-        map.createPane('pane_LooseLitterPoint_4');
-        map.getPane('pane_LooseLitterPoint_4').style.zIndex = 404;
-        map.getPane('pane_LooseLitterPoint_4').style['mix-blend-mode'] = 'normal';
-        var layer_LooseLitterPoint_4 = new L.geoJson(json_LooseLitterPoint_4, {
+        map.createPane('pane_Biowaste_3');
+        map.getPane('pane_Biowaste_3').style.zIndex = 403;
+        map.getPane('pane_Biowaste_3').style['mix-blend-mode'] = 'normal';
+        var layer_Biowaste_3 = new L.geoJson(json_Biowaste_3, {
             attribution: '<a href=""></a>',
-            pane: 'pane_LooseLitterPoint_4',
-            onEachFeature: pop_LooseLitterPoint_4,
+            pane: 'pane_Biowaste_3',
+            onEachFeature: pop_Biowaste_3,
             pointToLayer: function(feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_LooseLitterPoint_4_0(feature));
+                return L.circleMarker(latlng, style_Biowaste_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_LooseLitterPoint_4);
+        bounds_group.addLayer(layer_Biowaste_3);
+        var img_BiowasteConcentration_4 = 'data/BiowasteConcentration_4.png';
+        var img_bounds_BiowasteConcentration_4 = [
+            [35.1262554964, -90.0764951126],
+            [35.1587967059, -90.0292632115]
+        ];
+        var overlay_BiowasteConcentration_4 = new L.imageOverlay(img_BiowasteConcentration_4, img_bounds_BiowasteConcentration_4);
+        bounds_group.addLayer(overlay_BiowasteConcentration_4);
+
+        function pop_BaggedWaste_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_BaggedWaste_5_0() {
+            return {
+                pane: 'pane_BaggedWaste_5',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,104,55,1.0)',
+            }
+        }
+        map.createPane('pane_BaggedWaste_5');
+        map.getPane('pane_BaggedWaste_5').style.zIndex = 405;
+        map.getPane('pane_BaggedWaste_5').style['mix-blend-mode'] = 'normal';
+        var layer_BaggedWaste_5 = new L.geoJson(json_BaggedWaste_5, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_BaggedWaste_5',
+            onEachFeature: pop_BaggedWaste_5,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_BaggedWaste_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BaggedWaste_5);
+        var img_BaggedWasteConcentration_6 = 'data/BaggedWasteConcentration_6.png';
+        var img_bounds_BaggedWasteConcentration_6 = [
+            [35.126302709, -90.0764975076],
+            [35.1587752951, -90.0292621375]
+        ];
+        var overlay_BaggedWasteConcentration_6 = new L.imageOverlay(img_BaggedWasteConcentration_6, img_bounds_BaggedWasteConcentration_6);
+        bounds_group.addLayer(overlay_BaggedWasteConcentration_6);
+
+        function pop_Graffiti_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_Graffiti_7_0() {
+            return {
+                pane: 'pane_Graffiti_7',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,0,13,1.0)',
+            }
+        }
+        map.createPane('pane_Graffiti_7');
+        map.getPane('pane_Graffiti_7').style.zIndex = 407;
+        map.getPane('pane_Graffiti_7').style['mix-blend-mode'] = 'normal';
+        var layer_Graffiti_7 = new L.geoJson(json_Graffiti_7, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Graffiti_7',
+            onEachFeature: pop_Graffiti_7,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Graffiti_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Graffiti_7);
+        var img_GraffitiConcentration_8 = 'data/GraffitiConcentration_8.png';
+        var img_bounds_GraffitiConcentration_8 = [
+            [35.1262759462, -90.0764760689],
+            [35.1587485238, -90.0292407059]
+        ];
+        var overlay_GraffitiConcentration_8 = new L.imageOverlay(img_GraffitiConcentration_8, img_bounds_GraffitiConcentration_8);
+        bounds_group.addLayer(overlay_GraffitiConcentration_8);
+
+        function pop_HomelessEncampment_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_HomelessEncampment_9_0() {
+            return {
+                pane: 'pane_HomelessEncampment_9',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,1,119,1.0)',
+            }
+        }
+        map.createPane('pane_HomelessEncampment_9');
+        map.getPane('pane_HomelessEncampment_9').style.zIndex = 409;
+        map.getPane('pane_HomelessEncampment_9').style['mix-blend-mode'] = 'normal';
+        var layer_HomelessEncampment_9 = new L.geoJson(json_HomelessEncampment_9, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_HomelessEncampment_9',
+            onEachFeature: pop_HomelessEncampment_9,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_HomelessEncampment_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_HomelessEncampment_9);
+        var img_HomelessEncampmentConcentration_10 = 'data/HomelessEncampmentConcentration_10.png';
+        var img_bounds_HomelessEncampmentConcentration_10 = [
+            [35.1262644176, -90.0764754841],
+            [35.1587369949, -90.0292401276]
+        ];
+        var overlay_HomelessEncampmentConcentration_10 = new L.imageOverlay(img_HomelessEncampmentConcentration_10, img_bounds_HomelessEncampmentConcentration_10);
+        bounds_group.addLayer(overlay_HomelessEncampmentConcentration_10);
+
+        function pop_LooseLitter_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_LooseLitter_11_0() {
+            return {
+                pane: 'pane_LooseLitter_11',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(146,1,69,1.0)',
+            }
+        }
+        map.createPane('pane_LooseLitter_11');
+        map.getPane('pane_LooseLitter_11').style.zIndex = 411;
+        map.getPane('pane_LooseLitter_11').style['mix-blend-mode'] = 'normal';
+        var layer_LooseLitter_11 = new L.geoJson(json_LooseLitter_11, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_LooseLitter_11',
+            onEachFeature: pop_LooseLitter_11,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_LooseLitter_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_LooseLitter_11);
+        var img_LooseLitterConcentration_12 = 'data/LooseLitterConcentration_12.png';
+        var img_bounds_LooseLitterConcentration_12 = [
+            [35.1262759462, -90.0764760689],
+            [35.1587485238, -90.0292407059]
+        ];
+        var overlay_LooseLitterConcentration_12 = new L.imageOverlay(img_LooseLitterConcentration_12, img_bounds_LooseLitterConcentration_12);
+        bounds_group.addLayer(overlay_LooseLitterConcentration_12);
+        map.addLayer(overlay_LooseLitterConcentration_12);
+
+        function pop_OvergrownWeeds_13(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_OvergrownWeeds_13_0() {
+            return {
+                pane: 'pane_OvergrownWeeds_13',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,109,44,1.0)',
+            }
+        }
+        map.createPane('pane_OvergrownWeeds_13');
+        map.getPane('pane_OvergrownWeeds_13').style.zIndex = 413;
+        map.getPane('pane_OvergrownWeeds_13').style['mix-blend-mode'] = 'normal';
+        var layer_OvergrownWeeds_13 = new L.geoJson(json_OvergrownWeeds_13, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_OvergrownWeeds_13',
+            onEachFeature: pop_OvergrownWeeds_13,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_OvergrownWeeds_13_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_OvergrownWeeds_13);
+        var img_OvergrownWeedsConcentration_14 = 'data/OvergrownWeedsConcentration_14.png';
+        var img_bounds_OvergrownWeedsConcentration_14 = [
+            [35.1262657442, -90.0764849225],
+            [35.1587383253, -90.0292495691]
+        ];
+        var overlay_OvergrownWeedsConcentration_14 = new L.imageOverlay(img_OvergrownWeedsConcentration_14, img_bounds_OvergrownWeedsConcentration_14);
+        bounds_group.addLayer(overlay_OvergrownWeedsConcentration_14);
+        map.addLayer(overlay_OvergrownWeedsConcentration_14);
+
+        function pop_PickerPile_15(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_PickerPile_15_0() {
+            return {
+                pane: 'pane_PickerPile_15',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(127,39,4,1.0)',
+            }
+        }
+        map.createPane('pane_PickerPile_15');
+        map.getPane('pane_PickerPile_15').style.zIndex = 415;
+        map.getPane('pane_PickerPile_15').style['mix-blend-mode'] = 'normal';
+        var layer_PickerPile_15 = new L.geoJson(json_PickerPile_15, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_PickerPile_15',
+            onEachFeature: pop_PickerPile_15,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_PickerPile_15_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PickerPile_15);
+        var img_PickerPileConcentration_16 = 'data/PickerPileConcentration_16.png';
+        var img_bounds_PickerPileConcentration_16 = [
+            [35.1262678601, -90.0764793402],
+            [35.158740439, -90.0292439833]
+        ];
+        var overlay_PickerPileConcentration_16 = new L.imageOverlay(img_PickerPileConcentration_16, img_bounds_PickerPileConcentration_16);
+        bounds_group.addLayer(overlay_PickerPileConcentration_16);
+
+        function pop_Tires_17(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['uid'] !== null ? Autolinker.link(String(feature.properties['uid'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['li_type'] !== null ? Autolinker.link(String(feature.properties['li_type'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['count'] !== null ? Autolinker.link(String(feature.properties['count'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['parcelnumb'] !== null ? Autolinker.link(String(feature.properties['parcelnumb'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {
+                maxHeight: 400
+            });
+        }
+
+        function style_Tires_17_0() {
+            return {
+                pane: 'pane_Tires_17',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(4,90,141,1.0)',
+            }
+        }
+        map.createPane('pane_Tires_17');
+        map.getPane('pane_Tires_17').style.zIndex = 417;
+        map.getPane('pane_Tires_17').style['mix-blend-mode'] = 'normal';
+        var layer_Tires_17 = new L.geoJson(json_Tires_17, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Tires_17',
+            onEachFeature: pop_Tires_17,
+            pointToLayer: function(feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Tires_17_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Tires_17);
+        var img_TireConcentration_18 = 'data/TireConcentration_18.png';
+        var img_bounds_TireConcentration_18 = [
+            [35.1262709366, -90.0764938878],
+            [35.1587435212, -90.0292585349]
+        ];
+        var overlay_TireConcentration_18 = new L.imageOverlay(img_TireConcentration_18, img_bounds_TireConcentration_18);
+        bounds_group.addLayer(overlay_TireConcentration_18);
+        var osmGeocoder = new L.Control.OSMGeocoder({
+            collapsed: false,
+            position: 'topright',
+            text: 'Search',
+        });
+        osmGeocoder.addTo(map);
         var baseMaps = {
             'OSM B&W': basemap0,
             'OSM HOT': basemap1,
@@ -492,13 +978,25 @@
             'Satellite': satMutant
         };
         L.control.layers(baseMaps, {
-            '<img src="legend/LooseLitterPoint_4.png" /> Loose Litter Point': layer_LooseLitterPoint_4,
-            "Loose Litter Concentration": overlay_LooseLitterConcentration_3,
+            "Tire Concentration": overlay_TireConcentration_18,
+            '<img src="legend/Tires_17.png" /> Tires': layer_Tires_17,
+            "Picker Pile Concentration": overlay_PickerPileConcentration_16,
+            '<img src="legend/PickerPile_15.png" /> Picker Pile': layer_PickerPile_15,
+            "Overgrown Weeds Concentration": overlay_OvergrownWeedsConcentration_14,
+            '<img src="legend/OvergrownWeeds_13.png" /> Overgrown Weeds': layer_OvergrownWeeds_13,
+            "Loose Litter Concentration": overlay_LooseLitterConcentration_12,
+            '<img src="legend/LooseLitter_11.png" /> Loose Litter': layer_LooseLitter_11,
+            "Homeless Encampment Concentration": overlay_HomelessEncampmentConcentration_10,
+            '<img src="legend/HomelessEncampment_9.png" /> Homeless Encampment': layer_HomelessEncampment_9,
+            "Graffiti Concentration": overlay_GraffitiConcentration_8,
+            '<img src="legend/Graffiti_7.png" /> Graffiti': layer_Graffiti_7,
+            "Bagged Waste Concentration": overlay_BaggedWasteConcentration_6,
+            '<img src="legend/BaggedWaste_5.png" /> Bagged Waste': layer_BaggedWaste_5,
+            "Biowaste Concentration": overlay_BiowasteConcentration_4,
+            '<img src="legend/Biowaste_3.png" /> Biowaste': layer_Biowaste_3,
             '<img src="legend/UnoccupiedParcel_2.png" /> Unoccupied Parcel': layer_UnoccupiedParcel_2,
             'Land Use<br /><table><tr><td style="text-align: center;"><img src="legend/LandUse_1_Commercial0.png" /></td><td>Commercial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_TaxExemptgovernmentchruchetc1.png" /></td><td>Tax Exempt (government, chruch, etc.)</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Industrial2.png" /></td><td>Industrial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Residential3.png" /></td><td>Residential</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_VacantLand4.png" /></td><td>Vacant Land</td></tr></table>': layer_LandUse_1,
             'infrastructure<br /><table><tr><td style="text-align: center;"><img src="legend/infrastructure_0_DU0.png" /></td><td>DU</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_RB1.png" /></td><td>RB</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_WB2.png" /></td><td>WB</td></tr></table>': layer_infrastructure_0,
-        }, {
-            collapsed: false
         }).addTo(map);
         setBounds();
         L.ImageOverlay.include({

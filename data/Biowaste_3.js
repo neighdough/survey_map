@@ -1,0 +1,1 @@
+var json_Biowaste_3 = {"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"uid":"1","li_type":"BI","count":"1","parcelnumb":"002114  00015"},"geometry":{"type":"Point","coordinates":[-90.058349829904145,35.132998243590855]}}]}
