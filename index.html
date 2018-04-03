@@ -43,7 +43,7 @@
     <script src="js/leaflet-measure.js"></script>
     <script src="data/infrastructure_0.js"></script>
     <script src="data/LandUse_1.js"></script>
-    <script src="data/UnoccupiedParcel_2.js"></script>
+    <!--<script src="data/UnoccupiedParcel_2.js"></script>-->
     <script src="data/Biowaste_3.js"></script>
     <script src="data/BaggedWaste_5.js"></script>
     <script src="data/Graffiti_7.js"></script>
@@ -381,7 +381,7 @@
             }
         }
         map.createPane('pane_LandUse_1');
-        map.getPane('pane_LandUse_1').style.zIndex = 401;
+        map.getPane('pane_LandUse_1').style.zIndex = 301;
         map.getPane('pane_LandUse_1').style['mix-blend-mode'] = 'normal';
         var layer_LandUse_1 = new L.geoJson(json_LandUse_1, {
             attribution: '<a href=""></a>',
@@ -391,7 +391,12 @@
         });
         bounds_group.addLayer(layer_LandUse_1);
 
-        function pop_UnoccupiedParcel_2(feature, layer) {
+        /*var landuse_group = L.featureGroup([
+            layer_LandUse_1
+        ]).addTo(map);
+        landuse_group.bringToBack();*/
+
+        /*function pop_UnoccupiedParcel_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -425,7 +430,7 @@
             onEachFeature: pop_UnoccupiedParcel_2,
             style: style_UnoccupiedParcel_2_0,
         });
-        bounds_group.addLayer(layer_UnoccupiedParcel_2);
+        bounds_group.addLayer(layer_UnoccupiedParcel_2);*/
 
         function pop_Biowaste_3(feature, layer) {
             layer.on({
@@ -994,7 +999,7 @@
             '<img src="legend/BaggedWaste_5.png" /> Bagged Waste': layer_BaggedWaste_5,
             "Biowaste Concentration": overlay_BiowasteConcentration_4,
             '<img src="legend/Biowaste_3.png" /> Biowaste': layer_Biowaste_3,
-            '<img src="legend/UnoccupiedParcel_2.png" /> Unoccupied Parcel': layer_UnoccupiedParcel_2,
+            //'<img src="legend/UnoccupiedParcel_2.png" /> Unoccupied Parcel': layer_UnoccupiedParcel_2,
             'Land Use<br /><table><tr><td style="text-align: center;"><img src="legend/LandUse_1_Commercial0.png" /></td><td>Commercial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_TaxExemptgovernmentchruchetc1.png" /></td><td>Tax Exempt (government, chruch, etc.)</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Industrial2.png" /></td><td>Industrial</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_Residential3.png" /></td><td>Residential</td></tr><tr><td style="text-align: center;"><img src="legend/LandUse_1_VacantLand4.png" /></td><td>Vacant Land</td></tr></table>': layer_LandUse_1,
             'infrastructure<br /><table><tr><td style="text-align: center;"><img src="legend/infrastructure_0_DU0.png" /></td><td>DU</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_RB1.png" /></td><td>RB</td></tr><tr><td style="text-align: center;"><img src="legend/infrastructure_0_WB2.png" /></td><td>WB</td></tr></table>': layer_infrastructure_0,
         }).addTo(map);
